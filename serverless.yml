@@ -1,0 +1,29 @@
+service: "hack-incidents"
+
+provider:
+  name: "aws"
+  runtime: "python3.11"
+  memorySize: 512
+  timeout: 20
+  iam:
+    role: "arn:aws:iam::${env:AWS_USER_ID}:role/LabRole"
+
+plugins:
+  - "serverless-python-requirements"
+
+functions:
+  get_incidents:
+    handler: "functions/get_incidents.handler"
+    events:
+      - http:
+          path: "/incidents"
+          method: "get"
+          cors: true
+
+  get_incident:
+    handler: "functions/get_incident.handler"
+    events:
+      - http:
+          path: "/incidents/{incident_id}"
+          method: "get"
+          cors: true
