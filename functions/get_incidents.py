@@ -6,9 +6,9 @@ dynamodb = boto3.resource("dynamodb")
 
 
 def handler(event, context):
-    orders = dynamodb.Table("hack-incidents")
+    incidents = dynamodb.Table("hack-incidents")
 
-    resp = orders.scan()
-    orders = resp["Items"]
+    resp = incidents.scan()
+    incidents = resp.get("Items")
 
-    return response(200, orders)
+    return response(200, incidents)

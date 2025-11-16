@@ -2,9 +2,7 @@ import boto3
 
 from common import response
 
-sfn = boto3.client("stepfunctions")
 dynamodb = boto3.resource("dynamodb")
-
 incidents = dynamodb.Table("hack-incidents")
 
 

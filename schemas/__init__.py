@@ -14,9 +14,19 @@ class IncidentUrgency(str, Enum):
     high = "high"
 
 
+class IncidentStatus(str, Enum):
+    pending = "pending"
+    done = "done"
+
+
 class Incident(BaseModel):
     id: str
     kind: IncidentKind
     description: str
     location: str
     urgency: IncidentUrgency
+    status: IncidentStatus
+
+
+class IncidentSubscription(BaseModel):
+    connection_id: str

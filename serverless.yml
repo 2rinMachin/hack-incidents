@@ -12,6 +12,12 @@ plugins:
   - "serverless-python-requirements"
 
 functions:
+  broadcast_incidents:
+    handler: functions/websocket/broadcast_incidents.handler
+    environment:
+      "APIGW_DOMAIN": "${env:AWS_APIGW_DOMAIN}"
+      "APIGW_STAGE": "${env:AWS_APIGW_STAGE}"
+
   get_incidents:
     handler: "functions/get_incidents.handler"
     events:
@@ -27,3 +33,42 @@ functions:
           path: "/incidents/{incident_id}"
           method: "get"
           cors: true
+
+  post_incident:
+    handler: "functions/post_incident.handler"
+    events:
+      - http:
+          path: "/incidents"
+          method: "post"
+          cors: true
+
+  close_incident:
+    handler: "functions/close_incident.handler"
+    events:
+      - http:
+          path: "/incidents/close"
+          method: "put"
+          cors: true
+          # authorizer:
+          #   arn: "${env:AWS_VERIFY_AUTH_ARN}"
+          #   type: "request"
+          #   identitySource: "method.request.header.Authorization"
+
+  websocket_connect:
+    handler: "functions/websocket/connect.handler"
+    events:
+      - websocket:
+        route: "$connect"
+
+  websocket_disconnect:
+    handler: "functions/websocket/disconnect.handler"
+    events:
+      - websocket:
+        route: "$disconnect"
+
+  websocket_subscribe:
+    handler: "functions/websocket/subscribe.handler"
+    events:
+      - websocket:
+        route: "subscribe"
+        routeResponseSelectionExpression: "$default"
