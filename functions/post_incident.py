@@ -1,3 +1,5 @@
+import base64
+import os
 import uuid
 from datetime import datetime, timezone
 from typing import Optional
@@ -14,6 +16,8 @@ from schemas import (
     IncidentUrgency,
     User,
 )
+
+IMAGES_BUCKET = os.environ["AWS_INCIDENT_IMAGES_BUCKET"]
 
 events = boto3.client("events")
 dynamodb = boto3.resource("dynamodb")
@@ -53,6 +57,11 @@ def handler(event, context):
     )
 
     incidents.put_item(Item=new_incident.model_dump())
+
+    if data.image != None:
+        image_key = f"{new_incident.id}.png"
+        s3.Object(IMAGES_BUCKET, image_key).put(Body=base64.b64decode(data.image))
+        new_incident.image_url = f"https://{IMAGES_BUCKET}.s3.amazonaws.com/{image_key}"
 
     events.put_events(
         Entries=[

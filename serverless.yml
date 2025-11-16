@@ -68,6 +68,8 @@ functions:
 
   post_incident:
     handler: "functions/post_incident.handler"
+    environment:
+      "AWS_INCIDENT_IMAGES_BUCKET": "${env:AWS_INCIDENT_IMAGES_BUCKET}"
     events:
       - http:
           path: "/incidents"

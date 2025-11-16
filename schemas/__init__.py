@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import BaseModel
 
@@ -58,6 +58,7 @@ class Incident(BaseModel):
     author: IncidentAuthor
     history: list[IncidentHistoryEntry] = []
     created_at: str
+    image_url: Optional[str] | None = None
 
 
 class IncidentSubscription(BaseModel):
