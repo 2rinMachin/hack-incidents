@@ -4,6 +4,20 @@ from typing import Any
 from pydantic import BaseModel
 
 
+class UserRole(str, Enum):
+    student = "student"
+    staff = "staff"
+    authority = "authority"
+
+
+class User(BaseModel):
+    id: str
+    email: str
+    username: str
+    password: str
+    role: UserRole
+
+
 class IncidentKind(str, Enum):
     behavior = "behavior"
     aggression = "aggression"
@@ -21,6 +35,19 @@ class IncidentStatus(str, Enum):
     done = "done"
 
 
+class IncidentAuthor(BaseModel):
+    id: str
+    email: str
+    username: str
+    role: UserRole
+
+
+class IncidentHistoryEntry(BaseModel):
+    status: IncidentStatus
+    actor: IncidentAuthor
+    date: str
+
+
 class Incident(BaseModel):
     id: str
     kind: IncidentKind
@@ -28,6 +55,9 @@ class Incident(BaseModel):
     location: str
     urgency: IncidentUrgency
     status: IncidentStatus
+    author: IncidentAuthor
+    history: list[IncidentHistoryEntry] = []
+    created_at: str
 
 
 class IncidentSubscription(BaseModel):

@@ -1,10 +1,18 @@
 import uuid
+from datetime import datetime, timezone
 
 import boto3
 from pydantic import BaseModel
 
 from common import parse_body, response
-from schemas import Incident, IncidentKind, IncidentStatus, IncidentUrgency
+from schemas import (
+    Incident,
+    IncidentAuthor,
+    IncidentKind,
+    IncidentStatus,
+    IncidentUrgency,
+    User,
+)
 
 events = boto3.client("events")
 dynamodb = boto3.resource("dynamodb")
@@ -25,6 +33,8 @@ def handler(event, context):
 
     assert data != None
 
+    author = User(**event["requestContext"]["authorizer"])
+
     new_incident = Incident(
         id=str(uuid.uuid4()),
         kind=data.kind,
@@ -32,6 +42,10 @@ def handler(event, context):
         location=data.location,
         urgency=data.urgency,
         status=IncidentStatus.pending,
+        author=IncidentAuthor(
+            id=author.id, email=author.email, username=author.username, role=author.role
+        ),
+        created_at=datetime.now(timezone.utc).isoformat(),
     )
 
     incidents.put_item(Item=new_incident.model_dump())
