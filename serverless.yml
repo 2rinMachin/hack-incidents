@@ -96,3 +96,33 @@ functions:
       - websocket:
           route: "subscribe"
           routeResponseSelectionExpression: "$default"
+
+  send_incident_notification:
+    handler: "functions/sns/send_incident_notification.handler"
+    environment:
+      "AWS_INCIDENTS_TOPIC_ARN": "${env:AWS_INCIDENTS_TOPIC_ARN}"
+    events:
+      - eventBridge:
+          pattern:
+            source: ["hack.incidents"]
+            detail-type: ["incident.created"]
+
+  subscribe_email:
+    handler: "functions/sns/subscribe_email.handler"
+    environment:
+      "AWS_INCIDENTS_TOPIC_ARN": "${env:AWS_INCIDENTS_TOPIC_ARN}"
+    events:
+      - http:
+          path: "/subscribe/email"
+          method: "post"
+          cors: true
+
+  subscribe_sms:
+    handler: "functions/sns/subscribe_sms.handler"
+    environment:
+      "AWS_INCIDENTS_TOPIC_ARN": "${env:AWS_INCIDENTS_TOPIC_ARN}"
+    events:
+      - http:
+          path: "/subscribe/sms"
+          method: "post"
+          cors: true

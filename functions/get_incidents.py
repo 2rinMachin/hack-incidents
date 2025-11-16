@@ -7,8 +7,8 @@ dynamodb = boto3.resource("dynamodb")
 
 
 def handler(event, context):
-    incidents_table = dynamodb.Table("hack-incidents")
-    query = event.get("queryStringParameters", {})
+    incidents = dynamodb.Table("hack-incidents")
+    query = event.get("queryStringParameters") or {}
 
     kind = query.get("kind")
     status = query.get("status")
@@ -43,9 +43,9 @@ def handler(event, context):
         )
 
     if filter_expression:
-        resp = incidents_table.scan(FilterExpression=filter_expression)
+        resp = incidents.scan(FilterExpression=filter_expression)
     else:
-        resp = incidents_table.scan()
+        resp = incidents.scan()
 
     incidents = resp.get("Items", [])
 
