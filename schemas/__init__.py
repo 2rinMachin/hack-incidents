@@ -16,6 +16,7 @@ class IncidentUrgency(str, Enum):
 
 class IncidentStatus(str, Enum):
     pending = "pending"
+    attending = "attending"
     done = "done"
 
 
