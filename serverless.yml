@@ -58,17 +58,17 @@ functions:
     handler: "functions/websocket/connect.handler"
     events:
       - websocket:
-        route: "$connect"
+          route: "$connect"
 
   websocket_disconnect:
     handler: "functions/websocket/disconnect.handler"
     events:
       - websocket:
-        route: "$disconnect"
+          route: "$disconnect"
 
   websocket_subscribe:
     handler: "functions/websocket/subscribe.handler"
     events:
       - websocket:
-        route: "subscribe"
-        routeResponseSelectionExpression: "$default"
+          route: "subscribe"
+          routeResponseSelectionExpression: "$default"
