@@ -21,6 +21,9 @@ class User(BaseModel):
 class IncidentKind(str, Enum):
     behavior = "behavior"
     aggression = "aggression"
+    plagiarism = "plagiarism"
+    discrimination = "discrimination"
+    robbery = "robbery"
 
 
 class IncidentUrgency(str, Enum):
