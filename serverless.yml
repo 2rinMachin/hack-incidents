@@ -49,10 +49,10 @@ functions:
           path: "/incidents"
           method: "get"
           cors: true
-          # authorizer:
-          #   arn: "${env:AWS_VERIFY_STAFF_ARN}"
-          #   type: "request"
-          #   identitySource: "method.request.header.Authorization"
+          authorizer:
+            arn: "${env:AWS_VERIFY_STAFF_ARN}"
+            type: "request"
+            identitySource: "method.request.header.Authorization"
 
   get_summary:
     handler: "functions/get_summary.handler"
@@ -69,10 +69,10 @@ functions:
           path: "/incidents/{incident_id}"
           method: "get"
           cors: true
-          # authorizer:
-          #   arn: "${env:AWS_VERIFY_STAFF_ARN}"
-          #   type: "request"
-          #   identitySource: "method.request.header.Authorization"
+          authorizer:
+            arn: "${env:AWS_VERIFY_STAFF_ARN}"
+            type: "request"
+            identitySource: "method.request.header.Authorization"
 
   post_incident:
     handler: "functions/post_incident.handler"
@@ -138,10 +138,10 @@ functions:
           path: "/subscribe/email"
           method: "post"
           cors: true
-          # authorizer:
-          #   arn: "${env:AWS_VERIFY_STAFF_ARN}"
-          #   identitySource:
-          #     - "route.request.header.Authorization"
+          authorizer:
+            arn: "${env:AWS_VERIFY_STAFF_ARN}"
+            type: "request"
+            identitySource: "method.request.header.Authorization"
 
   subscribe_sms:
     handler: "functions/sns/subscribe_sms.handler"
@@ -152,7 +152,7 @@ functions:
           path: "/subscribe/sms"
           method: "post"
           cors: true
-          # authorizer:
-          #   arn: "${env:AWS_VERIFY_STAFF_ARN}"
-          #   type: "request"
-          #   identitySource: "method.request.header.Authorization"
+          authorizer:
+            arn: "${env:AWS_VERIFY_STAFF_ARN}"
+            type: "request"
+            identitySource: "method.request.header.Authorization"
