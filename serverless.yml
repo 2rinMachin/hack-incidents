@@ -41,24 +41,32 @@ functions:
           path: "/incidents"
           method: "post"
           cors: true
+          authorizer:
+            arn: "${env:AWS_VERIFY_USER_ARN}"
+            type: "request"
+            identitySource: "method.request.header.Authorization"
 
-  close_incident:
-    handler: "functions/close_incident.handler"
+  update_incident_status:
+    handler: "functions/update_incident_status.handler"
     events:
       - http:
-          path: "/incidents/close"
-          method: "put"
+          path: "/incidents/{incident_id}/status"
+          method: "patch"
           cors: true
-          # authorizer:
-          #   arn: "${env:AWS_VERIFY_AUTH_ARN}"
-          #   type: "request"
-          #   identitySource: "method.request.header.Authorization"
+          authorizer:
+            arn: "${env:AWS_VERIFY_USER_ARN}"
+            type: "request"
+            identitySource: "method.request.header.Authorization"
 
   websocket_connect:
     handler: "functions/websocket/connect.handler"
     events:
       - websocket:
           route: "$connect"
+          authorizer:
+            arn: "${env:AWS_VERIFY_USER_ARN}"
+            identitySource:
+              - "route.request.header.Authorization"
 
   websocket_disconnect:
     handler: "functions/websocket/disconnect.handler"

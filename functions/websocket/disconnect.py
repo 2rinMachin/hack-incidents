@@ -3,7 +3,7 @@ import boto3
 from common import response
 
 dynamodb = boto3.resource("dynamodb")
-subscriptions = dynamodb.Table("hack-incidents-subscriptions")
+subscriptions = dynamodb.Table("hack-incident-subscriptions")
 
 
 def handler(event, context):

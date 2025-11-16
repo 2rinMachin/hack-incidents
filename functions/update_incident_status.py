@@ -8,22 +8,24 @@ dynamodb = boto3.resource("dynamodb")
 incidents = dynamodb.Table("hack-incidents")
 
 
-class CloseIncidentRequest(BaseModel):
+class UpdateIncidentStatusRequest(BaseModel):
     id: str
+    status: IncidentStatus
 
 
 def handler(event, context):
-    data, err = parse_body(CloseIncidentRequest, event)
+    data, err = parse_body(UpdateIncidentStatusRequest, event)
     if err != None:
         return err
 
     assert data != None
 
-    incidents.update_item(
+    resp = incidents.update_item(
         Key={"id": data.id},
         UpdateExpression="SET #sts = :status",
         ExpressionAttributeNames={"#sts": "status"},
-        ExpressionAttributeValues={":status": IncidentStatus.done},
+        ExpressionAttributeValues={":status": data.status},
+        ReturnValues="ALL_NEW",
     )
 
-    return response(200, {"message": "Incident closed successfully."})
+    return response(200, resp["Attributes"])
