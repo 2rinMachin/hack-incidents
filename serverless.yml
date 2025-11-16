@@ -53,6 +53,7 @@ functions:
             arn: "${env:AWS_VERIFY_STAFF_ARN}"
             type: "request"
             identitySource: "method.request.header.Authorization"
+            resultTtlInSeconds: 0
 
   get_summary:
     handler: "functions/get_summary.handler"
@@ -73,6 +74,7 @@ functions:
             arn: "${env:AWS_VERIFY_STAFF_ARN}"
             type: "request"
             identitySource: "method.request.header.Authorization"
+            resultTtlInSeconds: 0
 
   post_incident:
     handler: "functions/post_incident.handler"
@@ -87,6 +89,7 @@ functions:
             arn: "${env:AWS_VERIFY_USER_ARN}"
             type: "request"
             identitySource: "method.request.header.Authorization"
+            resultTtlInSeconds: 0
 
   update_incident_status:
     handler: "functions/update_incident_status.handler"
@@ -99,6 +102,7 @@ functions:
             arn: "${env:AWS_VERIFY_STAFF_ARN}"
             type: "request"
             identitySource: "method.request.header.Authorization"
+            resultTtlInSeconds: 0
 
   websocket_connect:
     handler: "functions/websocket/connect.handler"
@@ -142,6 +146,7 @@ functions:
             arn: "${env:AWS_VERIFY_STAFF_ARN}"
             type: "request"
             identitySource: "method.request.header.Authorization"
+            resultTtlInSeconds: 0
 
   subscribe_sms:
     handler: "functions/sns/subscribe_sms.handler"
@@ -156,3 +161,4 @@ functions:
             arn: "${env:AWS_VERIFY_STAFF_ARN}"
             type: "request"
             identitySource: "method.request.header.Authorization"
+            resultTtlInSeconds: 0
