@@ -12,9 +12,13 @@ def handler(event, context):
 
     resp = subscriptions.get_item(Key={"connection_id": connection_id})
     if "Item" in resp:
-        return response(200, {"message": "Already subscribed."})
+        return response(
+            200, {"kind": "subscription_failed", "data": "Already subscribed."}
+        )
 
     new_subscription = IncidentSubscription(connection_id=connection_id)
     subscriptions.put_item(Item=new_subscription.model_dump())
 
-    return response(200, {"message": "Subscribed."})
+    return response(
+        200, {"kind": "subscription_success", "data": "Subscribed successfully."}
+    )

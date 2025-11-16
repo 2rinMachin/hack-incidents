@@ -47,6 +47,7 @@ def handler(event, context):
     else:
         resp = incidents.scan()
 
-    incidents = resp.get("Items", [])
+    items: list[dict] = resp.get("Items", [])
+    sorted_items = sorted(items, key=lambda x: x.get("created_at", ""), reverse=True)
 
-    return response(200, incidents)
+    return response(200, sorted_items)
