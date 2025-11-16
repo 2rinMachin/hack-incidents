@@ -41,7 +41,7 @@ def handler(event, context):
         Key={"id": incident_id},
         UpdateExpression="""
             SET #sts = :status,
-                history = list_append(history, :entry)
+                history = list_append(:entry, history)
         """,
         ExpressionAttributeNames={"#sts": "status"},
         ExpressionAttributeValues={
