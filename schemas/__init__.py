@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -31,3 +32,13 @@ class Incident(BaseModel):
 
 class IncidentSubscription(BaseModel):
     connection_id: str
+
+
+class BroadcastMessageKind(str, Enum):
+    incident_create = "incident_create"
+    incident_status_update = "incident_status_update"
+
+
+class BroadcastMessage(BaseModel):
+    kind: BroadcastMessageKind
+    data: Any

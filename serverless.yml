@@ -12,11 +12,27 @@ plugins:
   - "serverless-python-requirements"
 
 functions:
-  broadcast_incidents:
-    handler: functions/websocket/broadcast_incidents.handler
+  broadcast_incident_create:
+    handler: "functions/websocket/broadcast_incident_create.handler"
     environment:
       "APIGW_DOMAIN": "${env:AWS_APIGW_DOMAIN}"
       "APIGW_STAGE": "${env:AWS_APIGW_STAGE}"
+    events:
+      - eventBridge:
+          pattern:
+            source: ["hack.incidents"]
+            detail-type: ["incident.created"]
+
+  broadcast_incident_status:
+    handler: "functions/websocket/broadcast_incident_status.handler"
+    environment:
+      "APIGW_DOMAIN": "${env:AWS_APIGW_DOMAIN}"
+      "APIGW_STAGE": "${env:AWS_APIGW_STAGE}"
+    events:
+      - eventBridge:
+          pattern:
+            source: ["hack.incidents"]
+            detail-type: ["incident.status_updated"]
 
   get_incidents:
     handler: "functions/get_incidents.handler"

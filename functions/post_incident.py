@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from common import parse_body, response
 from schemas import Incident, IncidentKind, IncidentStatus, IncidentUrgency
 
+events = boto3.client("events")
 dynamodb = boto3.resource("dynamodb")
 incidents = dynamodb.Table("hack-incidents")
 
@@ -33,8 +34,16 @@ def handler(event, context):
         status=IncidentStatus.pending,
     )
 
-    new_incident_dict = new_incident.model_dump()
+    incidents.put_item(Item=new_incident.model_dump())
 
-    incidents.put_item(Item=new_incident_dict)
+    events.put_events(
+        Entries=[
+            {
+                "Source": "hack.incidents",
+                "DetailType": "incident.created",
+                "Detail": new_incident.model_dump_json(),
+            }
+        ]
+    )
 
-    return response(201, new_incident_dict)
+    return response(201, new_incident.model_dump_json())
