@@ -54,6 +54,14 @@ functions:
           #   type: "request"
           #   identitySource: "method.request.header.Authorization"
 
+  get_summary:
+    handler: "functions/get_summary.handler"
+    events:
+      - http:
+          path: "/incidents/summary"
+          method: "get"
+          cors: true
+
   get_incident:
     handler: "functions/get_incident.handler"
     events:
