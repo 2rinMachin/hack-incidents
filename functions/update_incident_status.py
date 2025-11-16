@@ -12,7 +12,6 @@ incidents = dynamodb.Table("hack-incidents")
 
 
 class UpdateIncidentStatusRequest(BaseModel):
-    id: str
     status: IncidentStatus
 
 
@@ -24,6 +23,7 @@ def handler(event, context):
 
     assert data != None
 
+    incident_id = event["pathParameters"]["incident_id"]
     actor = User(**event["requestContext"]["authorizer"])
 
     new_entry = IncidentHistoryEntry(
@@ -38,7 +38,7 @@ def handler(event, context):
     )
 
     resp = incidents.update_item(
-        Key={"id": data.id},
+        Key={"id": incident_id},
         UpdateExpression="""
             SET #sts = :status,
                 history = list_append(history, :entry)

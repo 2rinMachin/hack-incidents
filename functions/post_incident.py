@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime, timezone
+from typing import Optional
 
 import boto3
 from pydantic import BaseModel
@@ -16,6 +17,8 @@ from schemas import (
 
 events = boto3.client("events")
 dynamodb = boto3.resource("dynamodb")
+s3 = boto3.resource("s3")
+
 incidents = dynamodb.Table("hack-incidents")
 
 
@@ -24,6 +27,7 @@ class PostIncidentRequest(BaseModel):
     description: str
     location: str
     urgency: IncidentUrgency
+    image: Optional[str] = None
 
 
 def handler(event, context):
