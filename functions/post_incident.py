@@ -56,12 +56,12 @@ def handler(event, context):
         created_at=datetime.now(timezone.utc).isoformat(),
     )
 
-    incidents.put_item(Item=new_incident.model_dump())
-
     if data.image != None:
         image_key = f"{new_incident.id}.png"
         s3.Object(IMAGES_BUCKET, image_key).put(Body=base64.b64decode(data.image))
         new_incident.image_url = f"https://{IMAGES_BUCKET}.s3.amazonaws.com/{image_key}"
+
+    incidents.put_item(Item=new_incident.model_dump())
 
     events.put_events(
         Entries=[
