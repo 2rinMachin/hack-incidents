@@ -26,14 +26,11 @@ def handler(event, context):
     message_json = message.model_dump_json()
 
     for item in subs:
-        sub: IncidentSubscription
-
         try:
             sub = IncidentSubscription(**item)
-        except (KeyError, ValidationError):
-            continue
-
-        api_gw.post_to_connection(
-            ConnectionId=sub.connection_id,
-            Data=message_json,
-        )
+            api_gw.post_to_connection(
+                ConnectionId=sub.connection_id,
+                Data=message_json,
+            )
+        except:
+            pass
