@@ -24,6 +24,9 @@ class IncidentKind(str, Enum):
     plagiarism = "plagiarism"
     discrimination = "discrimination"
     robbery = "robbery"
+    technical = "technical"
+    lost_item = "lost_item"
+    other = "other"
 
 
 class IncidentUrgency(str, Enum):

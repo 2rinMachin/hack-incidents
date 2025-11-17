@@ -3,12 +3,7 @@ import os
 import boto3
 from pydantic import ValidationError
 
-from schemas import (
-    BroadcastMessage,
-    BroadcastMessageKind,
-    Incident,
-    IncidentSubscription,
-)
+from schemas import BroadcastMessage, BroadcastMessageKind, IncidentSubscription
 
 APIGW_DOMAIN = os.environ["APIGW_DOMAIN"]
 APIGW_STAGE = os.environ["APIGW_STAGE"]
@@ -20,14 +15,12 @@ api_gw = boto3.client("apigatewaymanagementapi", endpoint_url=ENDPOINT_URL)
 
 
 def handler(event, context):
-    incident = Incident(**event["detail"])
-
     resp = subscriptions.scan()
     subs: list[dict] = resp.get("Items", [])
 
     message = BroadcastMessage(
         kind=BroadcastMessageKind.incident_create,
-        data=incident,
+        data=event["detail"],
     )
 
     message_json = message.model_dump_json()
